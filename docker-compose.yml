@@ -1,0 +1,19 @@
+# Local PostgreSQL for development. Port 5435 so it does not clash with other projects.
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: ripple
+      POSTGRES_PASSWORD: ripple
+      POSTGRES_DB: ripple
+    ports:
+      - "5435:5432"
+    volumes:
+      - ripple-db:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ripple"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  ripple-db:

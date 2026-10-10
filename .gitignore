@@ -1,0 +1,10 @@
+# .NET
+bin/
+obj/
+*.user
+
+# Local secrets
+.env
+.env.*
+
+.DS_Store

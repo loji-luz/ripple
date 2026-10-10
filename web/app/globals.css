@@ -1,0 +1,534 @@
+@import 'tailwindcss';
+
+/* The palette. lib/colors.ts holds the same values, and lib/colors.test.ts checks that the two
+   match and that every text and background pair passes WCAG 2.1 AA. */
+@theme {
+  --color-ink: #181d27;
+  --color-slate: #4e5e7e;
+  --color-paper: #ffffff;
+  --color-canvas: #f3f4f6;
+  --color-tint: #e5e8ee;
+  --color-line: #cdd2db;
+
+  --color-success: #3a7d44;
+  --color-success-tint: #e7f2e9;
+  --color-error: #a10702;
+  --color-error-tint: #fbeae9;
+  --color-warning: #f4d35e;
+  --color-warning-tint: #fdf6dc;
+  --color-info: #24579e;
+  --color-info-tint: #e8f0fa;
+
+  --color-series-avalanche: #0a7ca8;
+  --color-series-snowball: #b4530a;
+  --color-series-half: #7a3e9d;
+
+  --font-sans: var(--font-public-sans), system-ui, 'Segoe UI', sans-serif;
+}
+
+@layer base {
+  html {
+    /* Everything is sized in rem, so the 17px base carries through. */
+    font-size: 17px;
+    scroll-padding-top: 1rem;
+  }
+
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.55;
+    font-weight: 400;
+    /* Wide tracking does as much for legibility as size does. */
+    letter-spacing: 0.025em;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  label,
+  legend,
+  th {
+    font-weight: 500;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-info);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* On the dark header the blue ring would disappear. */
+  .on-ink :focus-visible {
+    outline-color: var(--color-warning);
+  }
+
+  /* Money lines up in columns. */
+  .money {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+}
+
+@layer components {
+  /* ---------- Controls ---------- */
+
+  .field {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid var(--color-slate);
+    border-radius: 4px;
+    background: var(--color-paper);
+    padding: 0.45rem 0.6rem;
+    color: var(--color-ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .field[aria-invalid='true'] {
+    border-color: var(--color-error);
+    border-width: 2px;
+  }
+
+  .field:read-only {
+    background: var(--color-canvas);
+  }
+
+  /* A secondary button is slate; the primary one is the brand ink. */
+  .button {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border: 1px solid var(--color-slate);
+    border-radius: 4px;
+    background: var(--color-paper);
+    padding: 0.45rem 1rem;
+    color: var(--color-slate);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .button:hover {
+    background: var(--color-tint);
+  }
+
+  .button-primary {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .button-primary:hover {
+    background: var(--color-slate);
+  }
+
+  .button[aria-pressed='true'] {
+    background: var(--color-slate);
+    color: var(--color-paper);
+  }
+
+  .button:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+
+  .link {
+    color: var(--color-info);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Status and tags: a labelled chip with square-ish corners, never a pill and never colour alone. */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border-radius: 2px;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  /* ---------- The slider ---------- */
+
+  .slider {
+    width: 100%;
+    height: 44px;
+    accent-color: var(--color-info);
+    cursor: pointer;
+  }
+
+  /* ---------- Tables ----------
+     A visible outer border, a filled header row, dividers between rows, and money right-aligned
+     in tabular numerals with the unit in the header. */
+
+  .table-frame {
+    border: 1px solid var(--color-slate);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--color-paper);
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table caption {
+    caption-side: top;
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    font-weight: 700;
+    border-bottom: 1px solid var(--color-slate);
+  }
+
+  .table th,
+  .table td {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .table thead th {
+    background: var(--color-tint);
+    border-bottom: 1px solid var(--color-slate);
+    font-weight: 700;
+    font-size: 0.88rem;
+    line-height: 1.3;
+    vertical-align: bottom;
+  }
+
+  .table tbody tr + tr > * {
+    border-top: 1px solid var(--color-line);
+  }
+
+  .table tbody th {
+    font-weight: 500;
+  }
+
+  .table tfoot > tr > * {
+    border-top: 1px solid var(--color-slate);
+    background: var(--color-canvas);
+    font-weight: 500;
+  }
+
+  .table .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* Column headers wrap; the numbers under them do not. */
+  .table thead .num {
+    white-space: normal;
+  }
+
+  /* The strategies: the recommended row is tinted, and says so in words too. */
+  .strategy-table th,
+  .strategy-table td {
+    vertical-align: top;
+  }
+
+  .strategy-table thead th {
+    vertical-align: bottom;
+  }
+
+  .strategy-table tbody tr.is-recommended > * {
+    background: var(--color-success-tint);
+  }
+
+  /* The two steps of the planner. The current one is filled; the other is a way to get there. */
+  .step {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--color-slate);
+    background: var(--color-paper);
+    color: var(--color-slate);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .step:hover {
+    background: var(--color-tint);
+  }
+
+  .step[aria-current='step'] {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .step-number {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+
+  /* A definition or a tip behind a "?". The button is small to look at but 24px to hit, and
+     the bubble is fixed to the window so a table's edge never clips it. */
+  .hint-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex: none;
+    border: 1px solid var(--color-slate);
+    border-radius: 50%;
+    background: var(--color-paper);
+    color: var(--color-slate);
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: help;
+  }
+
+  .hint-button:hover,
+  .hint-button[aria-expanded='true'] {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .hint-bubble {
+    position: fixed;
+    z-index: 60;
+    padding: 0.6rem 0.75rem;
+    border-radius: 4px;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-size: 0.9rem;
+    font-weight: 400;
+    line-height: 1.45;
+    text-align: left;
+    white-space: normal;
+    letter-spacing: normal;
+    box-shadow: 0 6px 18px rgb(24 29 39 / 0.25);
+  }
+
+  /* A folded section: the whole row is the button. */
+  .disclosure {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    min-height: 52px;
+    padding: 0.5rem 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .disclosure:hover {
+    color: var(--color-info);
+  }
+
+  /* A table that scrolls inside its own frame, with the header row held at the top. On a
+     phone the table is a stack of cards and the page scrolls as usual. */
+  @media (min-width: 768px) {
+    .table-scroll {
+      max-height: var(--table-height, 26rem);
+      overflow-y: auto;
+    }
+
+    .table-scroll thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+  }
+
+  .table-compact th,
+  .table-compact td {
+    padding: 0.45rem 0.6rem;
+  }
+
+  .table-rows-hover tbody tr:hover > * {
+    background: var(--color-info-tint);
+  }
+
+  /* On a phone a table becomes a stack of cards: each row is a card and each cell is a labelled
+     line. The roles on the elements keep it a table for screen readers. */
+  @media (max-width: 767px) {
+    .table-stack thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+
+    .table-stack,
+    .table-stack tbody,
+    .table-stack tfoot,
+    .table-stack tr,
+    .table-stack th,
+    .table-stack td {
+      display: block;
+    }
+
+    .table-stack caption {
+      display: block;
+    }
+
+    .table-stack tbody tr {
+      padding: 0.5rem 0;
+    }
+
+    .table-stack tbody tr + tr {
+      border-top: 1px solid var(--color-slate);
+    }
+
+    .table-stack tbody tr + tr > * {
+      border-top: 0;
+    }
+
+    .table-stack th,
+    .table-stack td {
+      padding: 0.3rem 0.75rem;
+    }
+
+    .table-stack td[data-label],
+    .table-stack th[data-label] {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      text-align: right;
+    }
+
+    .table-stack td[data-label]::before,
+    .table-stack th[data-label]::before {
+      content: attr(data-label);
+      color: var(--color-slate);
+      font-weight: 500;
+      text-align: left;
+      white-space: normal;
+    }
+  }
+
+  /* ---------- Chart ---------- */
+
+  .chart text {
+    fill: var(--color-slate);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+
+  .chart .axis-title {
+    fill: var(--color-ink);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  @media (min-width: 768px) {
+    .debt-editor {
+      table-layout: fixed;
+    }
+
+    .debt-editor th,
+    .debt-editor td {
+      padding: 0.5rem 0.35rem;
+      vertical-align: top;
+    }
+
+    .debt-editor thead th {
+      vertical-align: bottom;
+    }
+
+    .debt-editor tr > :first-child {
+      padding-left: 0.6rem;
+    }
+
+    .debt-editor tr > :last-child {
+      padding-right: 0.6rem;
+    }
+  }
+
+  /* The editable debts table. From 768px it is an ordinary table. On a phone each debt becomes a
+     card: the name across the top, then the three numbers and the remove button in two columns. */
+  @media (max-width: 767px) {
+    .debt-editor thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+
+    .debt-editor,
+    .debt-editor tbody,
+    .debt-editor tfoot {
+      display: block;
+    }
+
+    .debt-editor tbody tr {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 0.6rem 0.75rem;
+      padding: 0.9rem 0.75rem;
+    }
+
+    .debt-editor tbody tr + tr {
+      border-top: 1px solid var(--color-slate);
+    }
+
+    .debt-editor tbody tr > * {
+      display: block;
+      padding: 0;
+      border-top: 0 !important;
+    }
+
+    .debt-editor tbody .cell-wide {
+      grid-column: 1 / -1;
+    }
+
+    .debt-editor tfoot tr {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.25rem 1.25rem;
+      padding: 0.7rem 0.75rem;
+      border-top: 1px solid var(--color-slate);
+      background: var(--color-canvas);
+    }
+
+    .debt-editor tfoot tr > * {
+      display: block;
+      padding: 0;
+      border-top: 0;
+      background: none;
+    }
+
+    .debt-editor tfoot tr > [data-label]::before {
+      content: attr(data-label) ' ';
+      color: var(--color-slate);
+    }
+
+    .debt-editor tfoot .cell-desktop {
+      display: none;
+    }
+  }
+
+}
+
+/* This is money: nothing moves unless it has to. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

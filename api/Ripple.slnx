@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Ripple.Api/Ripple.Api.csproj" />
+    <Project Path="src/Ripple.Data/Ripple.Data.csproj" />
+    <Project Path="src/Ripple.Domain/Ripple.Domain.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Ripple.Api.Tests/Ripple.Api.Tests.csproj" />
+    <Project Path="tests/Ripple.Domain.Tests/Ripple.Domain.Tests.csproj" />
+  </Folder>
+</Solution>
